@@ -2,8 +2,12 @@ package com.example.tictactoe;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,18 +17,34 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    int player;
-    int[][] array = new int[9][2];// value in second column of array : circle=0 cross=1 none=2
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        loadFragment(new Menu_fragment());
+        /*Button play = findViewById(R.id.play);
 
-        for(int i=0; i<9; i++)
-            array[i][1]=2;
+        play.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                loadFragment(new Menu_fragment());
+            }
+        });*/
+
+
     }
 
-    public void add(View view)
+    private void loadFragment(Fragment fragment) {
+
+// create a FragmentManager
+        FragmentManager fm = getFragmentManager();
+// create a FragmentTransaction to begin the transaction and replace the Fragment
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+// replace the FrameLayout with new Fragment
+        fragmentTransaction.replace(R.id.frame1, fragment);
+        fragmentTransaction.commit(); // save the changes
+    }
+    /*public void add(View view)
     {
         ImageView sign = (ImageView) view;
         String tag_string = sign.getTag().toString();
@@ -43,8 +63,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         sign.animate().alpha(1).setDuration(1000);
-        sign.setClickable(false);
         checkGameStatus(tag);
+        sign.setClickable(false);
+
 
 
 
@@ -110,5 +131,5 @@ public class MainActivity extends AppCompatActivity {
     }
     public void gameOver(){
 
-    }
+    }*/
 }
