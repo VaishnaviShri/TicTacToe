@@ -6,13 +6,27 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_centerHorizontal="true"
+                android:layout_marginVertical="50dp">
             <TextView
                 android:id="@+id/winner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"
-                android:layout_centerHorizontal="true"
-                android:layout_marginVertical="50dp"/>
+                android:layout_gravity="center_horizontal"
+                android:visibility="invisible" />
+            <Button
+                android:id="@+id/play_again_button"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="PLAY AGAIN"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp"
+                android:visibility="invisible"/>
+            </LinearLayout>
             <LinearLayout
                 android:id="@+id/game"
                 android:scaleX="1.5"
@@ -113,13 +127,5 @@
 
                 </GridLayout>
             </LinearLayout>
-            <TextView
-                android:id="@+id/gameOver"
-                android:layout_centerInParent="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="invisible"
-                android:layout_centerHorizontal="true"
-                android:layout_marginVertical="50dp"/>
         </RelativeLayout>
 </LinearLayout>

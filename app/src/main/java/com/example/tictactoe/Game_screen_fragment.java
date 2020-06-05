@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -23,16 +24,18 @@ public class Game_screen_fragment extends Fragment {
 
 
     int mode;
+    boolean game_active;
     int player, single_player_sign_choice;
     int[][] array = new int[9][2];// value in second column of array : circle=0 cross=1 none=2
-    TextView textView, gameOver;
+    TextView textView;
     GridLayout grid;
     View view;
+    Button play_again_button;
 
     public void instanceOf(int mode_entered, int sign_choice){
         mode = mode_entered;
-        if(mode==1){
-            single_player_sign_choice =sign_choice;
+        if(mode == 1){
+            single_player_sign_choice = sign_choice;
         }
 
     }
@@ -49,8 +52,14 @@ public class Game_screen_fragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.game_screen_fragment, container, false);
         grid = view.findViewById(R.id.gridLayout);
-        int childCount = grid.getChildCount();
+        action_on_click();
 
+        textView = view.findViewById(R.id.winner);
+        play_again_button = view.findViewById(R.id.play_again_button);
+        return view;
+    }
+    public void action_on_click(){
+        int childCount = grid.getChildCount();
         for (int i= 0; i < childCount; i++){
             final ImageView box = (ImageView) grid.getChildAt(i);
             box.setOnClickListener(new View.OnClickListener(){
@@ -60,9 +69,7 @@ public class Game_screen_fragment extends Fragment {
                 }
             });
         }
-        textView = view.findViewById(R.id.winner);
-        gameOver = view.findViewById(R.id.gameOver);
-        return view;
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -145,9 +152,9 @@ public class Game_screen_fragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void checkGameStatus(int tag){
         int i, j,n=3;
-        boolean horizontal_match, vertical_match, diagonal_match;
+        boolean horizontal_match, vertical_match, r_diagonal_match, l_diagonal_match;
         int count =0;
-        horizontal_match = vertical_match = diagonal_match = false;
+        horizontal_match = vertical_match = r_diagonal_match = l_diagonal_match = false;
 
         int t=0;
         for (i=0; i<3; i++){
@@ -168,9 +175,21 @@ public class Game_screen_fragment extends Fragment {
             if (array[t][1] == player)
                 count++;
             if(count==n)
-                diagonal_match = true;
+                r_diagonal_match = true;
 
             t+=4;
+
+        }
+
+        t=0;
+        count=0;
+        for (i=0; i<3; i++){
+            if (array[t][1] == player)
+                count++;
+            if(count==n)
+                l_diagonal_match = true;
+
+            t+=2;
 
         }
 
@@ -187,8 +206,18 @@ public class Game_screen_fragment extends Fragment {
             }
         }
 
-        if(vertical_match || horizontal_match || diagonal_match)
+        if(vertical_match || horizontal_match || r_diagonal_match || l_diagonal_match)
             declareWinner();
+
+        game_active = false;
+        for(i = 0; i<9 ; i++){
+            if(!(array[i][1]==2)) {
+                game_active=true;
+                break;
+            }
+        }
+        if(!game_active)
+            gameOver();
 
     }
    public void declareWinner(){
@@ -208,7 +237,27 @@ public class Game_screen_fragment extends Fragment {
             final ImageView box = (ImageView) grid.getChildAt(i);
             box.setClickable(false);
         }
-        gameOver.setVisibility(View.VISIBLE);
+        play_again_button.setVisibility(View.VISIBLE);
+        play_again_button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                play_again();
+            }
+        });
+
+
+    }
+    public void play_again(){
+        int childCount = grid.getChildCount();
+        for (int i= 0; i < childCount; i++){
+            final ImageView box = (ImageView) grid.getChildAt(i);
+            box.setVisibility(View.INVISIBLE);
+            box.setClickable(true);
+            array[i][1] = 2;
+        }
+        textView.setVisibility(View.INVISIBLE);
+        play_again_button.setVisibility(View.INVISIBLE);
+        action_on_click();
 
 
     }
